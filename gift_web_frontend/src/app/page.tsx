@@ -370,7 +370,7 @@ export default function HomePage() {
         <ul className="g-nav-links">
           <li><a href="/shop">Shop</a></li>
           <li><a href="/category/gift-boxes">Gift Boxes</a></li>
-          <li><a href="/category/chocolates">Chocolates</a></li>
+          <li><a href="/chocolates">Chocolates</a></li>
           <li><a href="/about">About</a></li>
         </ul>
         <div className="g-nav-actions">
@@ -403,7 +403,7 @@ export default function HomePage() {
             </p>
             <div className="g-hero-btns">
               <Link href="/shop" className="g-btn-primary">Shop Now</Link>
-              <Link href="/category/gift-boxes" className="g-btn-outline">Explore Gift Boxes</Link>
+              <Link href="/explore-gifts" className="g-btn-outline">Explore Gift Boxes</Link>
             </div>
           </div>
         </section>
