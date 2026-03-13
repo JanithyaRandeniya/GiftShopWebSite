@@ -1,16 +1,19 @@
 "use client";
 
 export default function Ribbon() {
+  const items = [
+    "✦ FREE GIFT WRAPPING",
+    "✦ SAME-DAY DELIVERY",
+    "✦ CUSTOM MESSAGES",
+    "✦ LUXURY PACKAGING",
+    "✦ 100% HANDCRAFTED",
+  ];
   return (
     <div className="g-ribbon">
       <div className="g-ribbon-inner">
-        {[0, 1].map((r) => (
+        {[0, 1].map(r => (
           <span key={r} style={{ display: "flex", gap: "60px" }}>
-            <span>✦ FREE GIFT WRAPPING</span>
-            <span>✦ SAME-DAY DELIVERY</span>
-            <span>✦ CUSTOM MESSAGES</span>
-            <span>✦ LUXURY PACKAGING</span>
-            <span>✦ 100% HANDCRAFTED</span>
+            {items.map((it, i) => <span key={i}>{it}</span>)}
           </span>
         ))}
       </div>

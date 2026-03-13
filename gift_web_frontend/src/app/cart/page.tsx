@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { Nav, Footer } from "../layout";
+import Nav from "@/src/components/nav";
+import Footer from "@/src/components/footer";
 
 const initItems = [
   { id:1, name:"Luxury Pink Gift Box", price:4500, emoji:"🎁", qty:1, note:"" },

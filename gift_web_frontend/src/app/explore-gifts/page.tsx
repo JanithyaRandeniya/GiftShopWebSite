@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { Nav, Footer, Ribbon } from "../layout";
+import Nav from "@/src/components/nav";
+import Ribbon from "@/src/components/ribbon";
+import Footer from "@/src/components/footer";
 
 const allGifts = [
   { id:1, name:"Luxury Pink Gift Box", price:4500, category:"Gift Boxes", badge:"Bestseller", emoji:"🎁", desc:"Satin-lined with chocolates & candle", rating:5, reviews:128, mood:"romantic" },

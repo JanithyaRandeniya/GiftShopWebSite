@@ -1,5 +1,7 @@
 "use client";
-import { Nav, Footer, Ribbon } from "../layout";
+import Nav from "@/src/components/nav";
+import Ribbon from "@/src/components/ribbon";
+import Footer from "@/src/components/footer";
 
 const team = [
   { name:"Priya Sharma", role:"Founder & CEO", emoji:"👩‍💼", bio:"Started Giftly in 2019 with a passion for making gifting meaningful." },

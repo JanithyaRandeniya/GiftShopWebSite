@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Nav, Footer, Ribbon } from "../layout";
+import Nav from "@/src/components/nav";
+import Ribbon from "@/src/components/ribbon";
+import Footer from "@/src/components/footer";
 
 const chocolates = [
   { id:1, name:"Belgian Truffle Collection", price:3200, badge:"Bestseller", emoji:"🍫", desc:"24 handcrafted Belgian truffles in 6 flavours", weight:"300g", type:"Truffle", rating:5, reviews:84 },

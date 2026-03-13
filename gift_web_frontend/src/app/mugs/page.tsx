@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Nav, Footer, Ribbon } from "../layout";
+import Nav from "@/src/components/nav";
+import Ribbon from "@/src/components/ribbon";
+import Footer from "@/src/components/footer"; 
 
 const mugs = [
   { id:1, name:"Romantic Mug Duo", price:2800, badge:"Popular", emoji:"☕", desc:"Matching 'You & Me' porcelain mugs for couples", material:"Porcelain", capacity:"350ml", rating:4, reviews:62 },

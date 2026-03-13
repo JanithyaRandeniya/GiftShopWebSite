@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Nav, Footer } from "../layout";
+import Nav from "@/src/components/nav";
+import Footer from "@/src/components/footer";
 
 const styles = `
   .settings-layout { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
