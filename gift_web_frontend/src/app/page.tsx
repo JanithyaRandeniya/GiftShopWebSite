@@ -5,17 +5,17 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const categories = [
-  { name: "Gift Boxes", emoji: "🎁", desc: "Curated luxury sets", link: "/category/gift-boxes" },
-  { name: "Chocolates", emoji: "🍫", desc: "Sweet indulgences", link: "/category/chocolates" },
-  { name: "Mugs & Keepsakes", emoji: "☕", desc: "Memories to hold", link: "/category/mugs" },
-  { name: "Teddy Bears", emoji: "🧸", desc: "Huggable love", link: "/category/teddies" },
+  { name: "Gift Boxes", desc: "Curated luxury sets", link: "/category/gift-boxes", img: "/images/gifts/boxwithflower1.jpg", backImg: "/images/gifts/black_box.jpg" },
+  { name: "Chocolates", desc: "Sweet indulgences", link: "/category/chocolates", img: "/images/gifts/chocalate2.webp", backImg: "/images/gifts/choclatebox1.webp" },
+  { name: "Mugs", desc: "Memories to hold", link: "/category/mugs", img: "/images/gifts/mug2.webp", backImg: "/images/gifts/mug1.webp" },
+  { name: "Teddy Bears", desc: "Huggable love", link: "/category/teddies", img: "/images/gifts/teddy3.webp", backImg: "/images/gifts/teedy4.webp" },
 ];
 
 const products = [
-  { name: "Luxury Pink Gift Box", price: "Rs. 4,500", badge: "Bestseller", emoji: "🎁" },
-  { name: "Chocolate Surprise Set", price: "Rs. 3,200", badge: "New", emoji: "🍫" },
-  { name: "Romantic Mug Duo", price: "Rs. 2,800", badge: "Popular", emoji: "☕" },
-  { name: "Premium Love Box", price: "Rs. 5,500", badge: "Limited", emoji: "💝" },
+  { name: "Luxury Pink Gift Box", price: "Rs. 4,500", badge: "Bestseller", img: "/images/gifts/boxwithflower1.jpg", backImg: "/images/gifts/black_box.jpg" },
+  { name: "Chocolate Surprise Set", price: "Rs. 3,200", badge: "New", img: "/images/gifts/choco1.webp", backImg: "/images/gifts/mensgift1.webp" },
+  { name: "Romantic Mug Duo", price: "Rs. 2,800", badge: "Popular", img: "/images/gifts/lovemug.webp", backImg: "/images/gifts/photoframe1.webp" },
+  { name: "Premium Love Box", price: "Rs. 5,500", badge: "Limited", img: "/images/gifts/teddy1.webp", backImg: "/images/gifts/wallet1.webp" },
 ];
 
 const testimonials = [
@@ -191,24 +191,75 @@ const styles = `
   }
   .g-section-sub { color: var(--text-soft); font-size: 1rem; }
 
+  /* ── 3-D FLIP CARD SHARED ── */
+  .flip-scene {
+    perspective: 1000px;
+    cursor: pointer;
+  }
+  .flip-card {
+    position: relative;
+    width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.7s cubic-bezier(0.4,0.2,0.2,1);
+    border-radius: var(--radius);
+  }
+  .flip-scene.flipped .flip-card { transform: rotateY(180deg); }
+  .flip-front, .flip-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .flip-back { transform: rotateY(180deg); }
+
   /* CATEGORIES */
   .g-cat-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 20px;
   }
-  .g-cat-card {
-    background: white; border-radius: var(--radius);
-    padding: 32px 20px; text-align: center;
-    text-decoration: none; color: var(--text);
-    box-shadow: var(--shadow-card);
-    border: 1px solid rgba(232,84,122,0.08);
-    transition: all 0.3s; position: relative; overflow: hidden;
+  .g-cat-scene {
+    height: 280px;
+    border-radius: var(--radius);
   }
-  .g-cat-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); background: var(--rose-pale); }
-  .g-cat-emoji { font-size: 3rem; margin-bottom: 12px; display: block; }
-  .g-cat-name { font-weight: 700; font-size: 1rem; color: var(--plum); margin-bottom: 4px; }
-  .g-cat-desc { font-size: 0.85rem; color: var(--text-soft); }
+  .g-cat-face {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-end;
+    padding-bottom: 24px;
+    background: var(--rose-pale);
+  }
+  .g-cat-face-img {
+    position: absolute; inset: 0;
+  }
+  .g-cat-face-img img { object-fit: cover; width: 100%; height: 100%; }
+  .g-cat-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(61,26,46,0.7) 0%, transparent 60%);
+  }
+  .g-cat-label {
+    position: relative; z-index: 2;
+    text-align: center; color: white;
+  }
+  .g-cat-name { font-weight: 700; font-size: 1rem; margin-bottom: 2px; }
+  .g-cat-desc { font-size: 0.8rem; opacity: 0.85; }
+  .g-cat-back-face {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; padding: 20px; text-align: center;
+    background: var(--plum);
+  }
+  .g-cat-back-face img { border-radius: 12px; object-fit: cover; }
+  .g-cat-back-face .g-cat-name { color: white; font-size: 1.1rem; }
+  .g-cat-back-face .g-cat-desc { color: rgba(255,255,255,0.75); font-size: 0.85rem; }
+  .g-cat-back-btn {
+    background: var(--rose); color: white;
+    border: none; padding: 8px 22px; border-radius: 50px;
+    font-family: var(--font-body); font-weight: 700; font-size: 0.8rem;
+    cursor: pointer; text-decoration: none; margin-top: 4px;
+  }
 
   /* PRODUCTS */
   .g-products-bg { background: linear-gradient(180deg, var(--cream) 0%, #fff0f5 100%); }
@@ -217,34 +268,54 @@ const styles = `
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 24px;
   }
-  .g-product-card {
-    background: white; border-radius: var(--radius);
-    overflow: hidden; box-shadow: var(--shadow-card);
-    border: 1px solid rgba(232,84,122,0.08);
-    transition: all 0.3s;
+  .g-product-scene {
+    height: 380px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
   }
-  .g-product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-soft); }
-  .g-product-img {
-    height: 200px; background: var(--rose-pale);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 5rem; position: relative;
+  .g-product-face {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    background: white;
   }
+  .g-product-img-wrap {
+    position: relative; flex: 1; overflow: hidden;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+  .g-product-img-wrap img { object-fit: cover; width: 100%; height: 100%; transition: transform 0.4s; }
+  .g-product-scene:hover .flip-front .g-product-img-wrap img { transform: scale(1.04); }
   .g-product-badge {
-    position: absolute; top: 12px; left: 12px;
+    position: absolute; top: 12px; left: 12px; z-index: 2;
     background: var(--rose); color: white;
     font-size: 0.7rem; font-weight: 700;
     padding: 4px 12px; border-radius: 50px;
   }
-  .g-product-info { padding: 20px; }
-  .g-product-name { font-weight: 700; font-size: 1rem; color: var(--text); margin-bottom: 6px; }
-  .g-product-price { color: var(--rose); font-weight: 700; font-size: 1.1rem; margin-bottom: 16px; }
+  .g-product-info { padding: 16px 20px 20px; }
+  .g-product-name { font-weight: 700; font-size: 0.95rem; color: var(--text); margin-bottom: 4px; }
+  .g-product-price { color: var(--rose); font-weight: 700; font-size: 1.05rem; margin-bottom: 12px; }
   .g-add-cart {
     width: 100%; background: var(--plum); color: white;
-    border: none; padding: 12px; border-radius: 12px;
-    font-family: var(--font-body); font-weight: 700; font-size: 0.9rem;
+    border: none; padding: 10px; border-radius: 12px;
+    font-family: var(--font-body); font-weight: 700; font-size: 0.85rem;
     cursor: pointer; transition: background 0.2s;
   }
   .g-add-cart:hover { background: var(--rose); }
+  .g-product-back-face {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 14px; padding: 24px; text-align: center;
+    background: linear-gradient(135deg, var(--plum), #4a1a60);
+  }
+  .g-product-back-face img { border-radius: 14px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+  .g-product-back-face .g-product-name { color: white; font-size: 1rem; }
+  .g-product-back-face .g-product-price { color: var(--rose-light); margin-bottom: 0; }
+  .g-product-back-face .g-add-cart { background: var(--rose); border-radius: 50px; padding: 10px 28px; width: auto; }
+  .g-product-back-face .g-add-cart:hover { background: #d43d6a; }
+  .flip-hint {
+    font-size: 0.72rem; color: rgba(255,255,255,0.55);
+    margin-top: -4px; letter-spacing: 0.5px;
+  }
 
   /* WHY US */
   .g-why-grid {
@@ -266,7 +337,7 @@ const styles = `
   .g-testi-inner { padding: 90px 48px; max-width: 700px; margin: 0 auto; text-align: center; }
   .g-testi-box {
     background: white; border-radius: var(--radius);
-    padding: 40px; margin-top: 0;
+    padding: 40px;
     box-shadow: var(--shadow-soft);
     border: 1px solid rgba(232,84,122,0.12);
   }
@@ -321,6 +392,28 @@ const styles = `
   }
 `;
 
+// Reusable 3D Flip Scene component
+function FlipScene({
+  className,
+  children,
+}: {
+  className?: string;
+  children: [React.ReactNode, React.ReactNode];
+}) {
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <div
+      className={`flip-scene${flipped ? " flipped" : ""}${className ? " " + className : ""}`}
+      onClick={() => setFlipped((f) => !f)}
+    >
+      <div className="flip-card">
+        <div className="flip-front">{children[0]}</div>
+        <div className="flip-back">{children[1]}</div>
+      </div>
+    </div>
+  );
+}
+
 export default function HomePage() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
 
@@ -352,13 +445,7 @@ export default function HomePage() {
         <div
           key={i}
           className="heart-particle"
-          style={{
-            left: p.left,
-            bottom: "-20px",
-            fontSize: p.size,
-            animationDuration: p.dur,
-            animationDelay: p.delay,
-          }}
+          style={{ left: p.left, bottom: "-20px", fontSize: p.size, animationDuration: p.dur, animationDelay: p.delay }}
         >
           {p.icon}
         </div>
@@ -385,9 +472,7 @@ export default function HomePage() {
           <Image
             src="/images/home/cover2.png"
             alt="Beautiful gift boxes for every occasion"
-            fill
-            priority
-            sizes="100vw"
+            fill priority sizes="100vw"
             className="g-hero-img"
           />
           <div className="g-hero-overlay" />
@@ -428,15 +513,32 @@ export default function HomePage() {
           <div className="g-section-head">
             <span className="g-section-label">Browse</span>
             <h2 className="g-section-title">Shop by Category</h2>
-            <p className="g-section-sub">Find the perfect gift for every occasion</p>
+            <p className="g-section-sub">Click a card to reveal more — find the perfect gift for every occasion</p>
           </div>
           <div className="g-cat-grid">
             {categories.map((cat, i) => (
-              <Link key={i} href={cat.link} className="g-cat-card">
-                <span className="g-cat-emoji">{cat.emoji}</span>
-                <div className="g-cat-name">{cat.name}</div>
-                <div className="g-cat-desc">{cat.desc}</div>
-              </Link>
+              <FlipScene key={i} className="g-cat-scene">
+                {/* FRONT */}
+                <div className="g-cat-face">
+                  <div className="g-cat-face-img">
+                    <Image src={cat.img} alt={cat.name} fill sizes="300px" style={{ objectFit: "cover" }} />
+                  </div>
+                  <div className="g-cat-overlay" />
+                  <div className="g-cat-label">
+                    <div className="g-cat-name">{cat.name}</div>
+                    <div className="g-cat-desc">{cat.desc}</div>
+                  </div>
+                </div>
+                {/* BACK */}
+                <div className="g-cat-back-face">
+                  <Image src={cat.backImg} alt={cat.name + " back"} width={160} height={120} style={{ objectFit: "cover", borderRadius: 12 }} />
+                  <div className="g-cat-name">{cat.name}</div>
+                  <div className="g-cat-desc">{cat.desc}</div>
+                  <Link href={cat.link} className="g-cat-back-btn" onClick={(e) => e.stopPropagation()}>
+                    Shop Now →
+                  </Link>
+                </div>
+              </FlipScene>
             ))}
           </div>
         </div>
@@ -447,21 +549,32 @@ export default function HomePage() {
             <div className="g-section-head">
               <span className="g-section-label">Handpicked</span>
               <h2 className="g-section-title">Featured Gifts</h2>
-              <p className="g-section-sub">Our most-loved, beautifully wrapped surprises</p>
+              <p className="g-section-sub">Click any card for a 3D reveal — our most-loved surprises</p>
             </div>
             <div className="g-product-grid">
               {products.map((p, i) => (
-                <div key={i} className="g-product-card">
-                  <div className="g-product-img">
-                    <span className="g-product-badge">{p.badge}</span>
-                    <span>{p.emoji}</span>
+                <FlipScene key={i} className="g-product-scene">
+                  {/* FRONT */}
+                  <div className="g-product-face">
+                    <div className="g-product-img-wrap">
+                      <span className="g-product-badge">{p.badge}</span>
+                      <Image src={p.img} alt={p.name} fill sizes="300px" style={{ objectFit: "cover" }} />
+                    </div>
+                    <div className="g-product-info">
+                      <div className="g-product-name">{p.name}</div>
+                      <div className="g-product-price">{p.price}</div>
+                      <button className="g-add-cart" onClick={(e) => e.stopPropagation()}>Add to Cart 🛒</button>
+                    </div>
                   </div>
-                  <div className="g-product-info">
+                  {/* BACK */}
+                  <div className="g-product-back-face">
+                    <Image src={p.backImg} alt={p.name + " detail"} width={180} height={150} style={{ objectFit: "cover", borderRadius: 14, boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }} />
                     <div className="g-product-name">{p.name}</div>
                     <div className="g-product-price">{p.price}</div>
-                    <button className="g-add-cart">Add to Cart 🛒</button>
+                    <button className="g-add-cart" onClick={(e) => e.stopPropagation()}>Add to Cart 🛒</button>
+                    <span className="flip-hint">tap again to flip back</span>
                   </div>
-                </div>
+                </FlipScene>
               ))}
             </div>
           </div>
@@ -499,18 +612,12 @@ export default function HomePage() {
             </div>
             <div className="g-testi-box">
               <div className="g-stars">{"★".repeat(testimonials[activeTestimonial].stars)}</div>
-              <p className="g-testi-text">
-                &ldquo;{testimonials[activeTestimonial].text}&rdquo;
-              </p>
+              <p className="g-testi-text">&ldquo;{testimonials[activeTestimonial].text}&rdquo;</p>
               <div className="g-testi-name">— {testimonials[activeTestimonial].name}</div>
             </div>
             <div className="g-dots">
               {testimonials.map((_, i) => (
-                <button
-                  key={i}
-                  className={`g-dot${i === activeTestimonial ? " active" : ""}`}
-                  onClick={() => setActiveTestimonial(i)}
-                />
+                <button key={i} className={`g-dot${i === activeTestimonial ? " active" : ""}`} onClick={() => setActiveTestimonial(i)} />
               ))}
             </div>
           </div>
@@ -518,15 +625,12 @@ export default function HomePage() {
 
         {/* CTA */}
         <div className="g-cta">
-          <h2 className="g-cta-title">
-            Ready to Make Someone <em>Smile?</em>
-          </h2>
+          <h2 className="g-cta-title">Ready to Make Someone <em>Smile?</em></h2>
           <p className="g-cta-sub">Browse our full collection and find the perfect gift today</p>
           <Link href="/shop" className="g-btn-white">Explore All Gifts ✦</Link>
         </div>
       </main>
 
-      {/* FOOTER */}
       <footer>
         <p>
           © 2026 Giftly. Made with 💗 &nbsp;|&nbsp;
