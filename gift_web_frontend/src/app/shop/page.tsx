@@ -1,170 +1,294 @@
 "use client";
-import Link from "next/link";
+
+import Image from "next/image";
 import { useState } from "react";
 import Nav from "@/src/components/nav";
 import Ribbon from "@/src/components/ribbon";
 import Footer from "@/src/components/footer";
 
-const allProducts = [
-  { id:1, name:"Luxury Pink Gift Box", price:4500, category:"gift-boxes", badge:"Bestseller", emoji:"🎁", desc:"Elegantly wrapped with silk ribbon", rating:5, reviews:128 },
-  { id:2, name:"Chocolate Truffle Set", price:3200, category:"chocolates", badge:"New", emoji:"🍫", desc:"24 handcrafted Belgian truffles", rating:5, reviews:84 },
-  { id:3, name:"Romantic Mug Duo", price:2800, category:"mugs", badge:"Popular", emoji:"☕", desc:"Matching porcelain mugs for two", rating:4, reviews:62 },
-  { id:4, name:"Premium Love Box", price:5500, category:"gift-boxes", badge:"Limited", emoji:"💝", desc:"Includes chocolates, candle & more", rating:5, reviews:201 },
-  { id:5, name:"Teddy Bear Hug", price:1900, category:"teddies", badge:"", emoji:"🧸", desc:"Extra soft 30cm plush teddy", rating:4, reviews:47 },
-  { id:6, name:"Rose Gold Candle Set", price:2200, category:"candles", badge:"New", emoji:"🕯️", desc:"Hand-poured soy wax, 3 scents", rating:5, reviews:33 },
-  { id:7, name:"Birthday Surprise Box", price:3800, category:"gift-boxes", badge:"Popular", emoji:"🎂", desc:"Personalized birthday curation", rating:5, reviews:156 },
-  { id:8, name:"Dark Chocolate Tower", price:4100, category:"chocolates", badge:"", emoji:"🍬", desc:"Assorted premium dark collection", rating:4, reviews:72 },
-  { id:9, name:"Anniversary Keepsake", price:6200, category:"gift-boxes", badge:"Premium", emoji:"💍", desc:"Luxury box with memory journal", rating:5, reviews:89 },
-  { id:10, name:"Floral Tea Set", price:3300, category:"mugs", badge:"", emoji:"🌸", desc:"4 teas + 2 floral-print cups", rating:4, reviews:41 },
-  { id:11, name:"Mini Truffle Box", price:1600, category:"chocolates", badge:"", emoji:"🍭", desc:"12 bite-sized chocolate truffles", rating:4, reviews:58 },
-  { id:12, name:"Giant Teddy XL", price:4500, category:"teddies", badge:"Popular", emoji:"🐻", desc:"1.2m plush bear, ultra cuddly", rating:5, reviews:113 },
+const chocolates = [
+  { id:1, name:"Belgian Truffle Collection", price:3200, badge:"Bestseller", img:"/images/gifts/choco1.webp", hoverImg:"/images/gifts/black_box.jpg", desc:"24 handcrafted Belgian truffles in 6 flavours", weight:"300g", type:"Truffle", rating:5, reviews:84 },
+  { id:2, name:"Dark Chocolate Tower", price:4100, badge:"", img:"/images/gifts/choco1.webp", hoverImg:"/images/gifts/mensgift1.webp", desc:"Layered tower of premium dark assortments", weight:"450g", type:"Dark", rating:4, reviews:72 },
+  { id:3, name:"Mini Truffle Box", price:1600, badge:"", img:"/images/gifts/choco1.webp", hoverImg:"/images/gifts/boxwithflower1.jpg", desc:"12 bite-sized truffles, perfect as a treat", weight:"150g", type:"Truffle", rating:4, reviews:58 },
+  { id:4, name:"Milk Chocolate Heart Box", price:2400, badge:"Popular", img:"/images/gifts/choco1.webp", hoverImg:"/images/gifts/wallet1.webp", desc:"Heart-shaped box filled with milk chocolates", weight:"250g", type:"Milk", rating:5, reviews:93 },
+  { id:5, name:"White Chocolate Bliss", price:2800, badge:"New", img:"/images/gifts/choco1.webp", hoverImg:"/images/gifts/photoframe1.webp", desc:"Creamy white chocolate with raspberry filling", weight:"200g", type:"White", rating:4, reviews:31 },
+  { id:6, name:"Artisan Mixed Selection", price:3600, badge:"", img:"/images/gifts/choco1.webp", hoverImg:"/images/gifts/teddy1.webp", desc:"Handpainted chocolates, 18 pieces, all unique", weight:"280g", type:"Artisan", rating:5, reviews:47 },
+  { id:7, name:"Nutty Praline Delight", price:2900, badge:"Popular", img:"/images/gifts/choco1.webp", hoverImg:"/images/gifts/choco1.webp", desc:"Hazelnut & almond pralines in gift packaging", weight:"320g", type:"Praline", rating:5, reviews:112 },
+  { id:8, name:"Sugar-Free Luxury Box", price:3400, badge:"Healthy", img:"/images/gifts/choco1.webp", hoverImg:"/images/gifts/black_box.jpg", desc:"Indulge guilt-free — zero sugar, full flavour", weight:"260g", type:"Sugar-Free", rating:4, reviews:29 },
 ];
 
-const categories = ["All","gift-boxes","chocolates","mugs","teddies","candles"];
-const sortOptions = ["Featured","Price: Low to High","Price: High to Low","Best Rated","Most Reviews"];
+const types = ["All","Truffle","Dark","Milk","White","Artisan","Praline","Sugar-Free"];
 
 const styles = `
-  .shop-filters {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 16px; flex-wrap: wrap; margin-bottom: 36px;
+  @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Mulish:wght@300;400;500;600&display=swap');
+
+  .choc-page { font-family: 'Mulish', sans-serif; background: #1a0d0d; }
+
+  /* HERO — dark luxe */
+  .choc-hero {
+    background: linear-gradient(135deg, #1a0d0d 0%, #3d1a2e 40%, #5a2030 100%);
+    padding: 80px 48px 64px; position: relative; overflow: hidden;
   }
-  .shop-cats { display: flex; gap: 10px; flex-wrap: wrap; }
-  .shop-cat-btn {
-    padding: 8px 20px; border-radius: 50px; border: 2px solid var(--border);
-    background: white; font-family: var(--font-body); font-weight: 700;
-    font-size: 0.82rem; cursor: pointer; transition: all 0.2s; color: var(--text-soft);
-    text-transform: capitalize;
+  .choc-hero::before {
+    content: '🍫'; position: absolute; right: 40px; top: 50%;
+    transform: translateY(-50%) rotate(15deg); font-size: 220px; opacity: 0.05; pointer-events: none;
   }
-  .shop-cat-btn:hover, .shop-cat-btn.active {
-    background: var(--rose); color: white; border-color: var(--rose);
+  .choc-hero-inner { max-width: 1280px; margin: 0 auto; }
+  .g-breadcrumb { display: flex; gap: 6px; align-items: center; font-size: 0.82rem; color: rgba(255,200,160,0.5); margin-bottom: 14px; }
+  .g-breadcrumb a { color: #d4956a; text-decoration: none; }
+  .choc-hero h1 {
+    font-family: 'Bodoni Moda', serif;
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    color: white; margin-bottom: 14px; line-height: 1.1;
   }
-  .shop-sort {
-    padding: 9px 16px; border-radius: var(--radius-sm); border: 2px solid var(--border);
-    font-family: var(--font-body); font-size: 0.88rem; color: var(--text);
-    background: white; cursor: pointer; outline: none;
+  .choc-hero h1 em { font-style: italic; color: #d4956a; }
+  .choc-hero p { color: rgba(255,255,255,0.65); font-size: 1rem; max-width: 480px; line-height: 1.7; margin-bottom: 28px; }
+  .choc-badges { display: flex; gap: 12px; flex-wrap: wrap; }
+  .choc-badge {
+    background: rgba(255,255,255,0.07); backdrop-filter: blur(8px);
+    border: 1px solid rgba(212,149,106,0.2); color: rgba(255,255,255,0.75);
+    padding: 8px 18px; border-radius: 50px; font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.3px;
   }
-  .shop-search { display: flex; max-width: 380px; width: 100%; }
-  .shop-search input {
-    flex: 1; padding: 11px 18px; border: 2px solid var(--border);
-    border-right: none; border-radius: 50px 0 0 50px;
-    font-family: var(--font-body); font-size: 0.9rem; outline: none;
-    transition: border-color 0.2s;
+
+  /* SECTION */
+  .choc-section { padding: 64px 48px; max-width: 1280px; margin: 0 auto; }
+  .choc-section-head { margin-bottom: 40px; }
+  .g-label { display: block; color: #d4956a; font-size: 0.78rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .choc-title { font-family: 'Bodoni Moda', serif; font-size: clamp(1.8rem, 3vw, 2.4rem); color: white; margin-bottom: 6px; }
+
+  /* TYPE FILTERS */
+  .type-filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+  .type-btn {
+    padding: 8px 20px; border-radius: 50px;
+    border: 1.5px solid rgba(212,149,106,0.2);
+    background: rgba(255,255,255,0.04); font-family: 'Mulish', sans-serif; font-weight: 600;
+    font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
+    color: rgba(255,255,255,0.6);
   }
-  .shop-search input:focus { border-color: var(--rose-light); }
-  .shop-search button {
-    padding: 11px 20px; background: var(--rose); color: white; border: none;
-    border-radius: 0 50px 50px 0; cursor: pointer; font-size: 1rem;
+  .type-btn:hover { border-color: #d4956a; color: #d4956a; }
+  .type-btn.active {
+    background: linear-gradient(135deg, #d4956a, #8a4020);
+    color: white; border-color: transparent;
+    box-shadow: 0 4px 16px rgba(212,149,106,0.3);
   }
-  .product-stars { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
-  .product-stars span { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* PRODUCT GRID */
+  .choc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 24px;
+  }
+
+  /* CARD — gloss sweep + dark theme */
+  .cc-card {
+    background: linear-gradient(135deg, #2a1010, #3d1a2e);
+    border-radius: 20px; overflow: hidden;
+    border: 1px solid rgba(212,149,106,0.12);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+  }
+  .cc-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 56px rgba(0,0,0,0.4), 0 0 0 1px rgba(212,149,106,0.2);
+  }
+
+  .cc-img-wrap {
+    position: relative; height: 220px; overflow: hidden;
+    background: linear-gradient(135deg, #2a1010, #4a2020);
+  }
+  .cc-img-main { position: absolute; inset: 0; transition: transform 0.6s ease; }
+  .cc-card:hover .cc-img-main { transform: scale(1.08); }
+
+  /* gloss sweep */
+  .cc-img-wrap::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(115deg, transparent 25%, rgba(255,255,255,0.12) 50%, transparent 75%);
+    transform: translateX(-120%); transition: transform 0.7s ease;
+    pointer-events: none; z-index: 2;
+  }
+  .cc-card:hover .cc-img-wrap::after { transform: translateX(120%); }
+
+  /* alt image peek at bottom */
+  .cc-img-alt {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 0;
+    overflow: hidden; transition: height 0.4s ease; z-index: 1;
+  }
+  .cc-card:hover .cc-img-alt { height: 45%; }
+  .cc-img-alt-inner { position: absolute; bottom: 0; left: 0; right: 0; height: 220px; }
+
+  .cc-badge {
+    position: absolute; top: 12px; left: 12px; z-index: 3;
+    padding: 5px 14px; border-radius: 50px;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
+    color: #1a0d0d; background: linear-gradient(135deg, #d4956a, #f0b870);
+    text-transform: uppercase;
+  }
   .wishlist-btn {
-    position: absolute; top: 14px; right: 14px; z-index: 2;
-    background: white; border: none; border-radius: 50%;
-    width: 32px; height: 32px; cursor: pointer; font-size: 1rem;
+    position: absolute; top: 12px; right: 12px; z-index: 3;
+    background: rgba(255,255,255,0.12); backdrop-filter: blur(8px); border: none; border-radius: 50%;
+    width: 34px; height: 34px; cursor: pointer; font-size: 1rem;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: all 0.2s;
+    transition: transform 0.2s, background 0.2s;
   }
-  .wishlist-btn:hover { transform: scale(1.15); }
-  .results-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 16px 24px; background: white; border-radius: var(--radius-sm);
-    border: 1px solid var(--border); margin-bottom: 28px; font-size: 0.88rem;
+  .wishlist-btn:hover { transform: scale(1.2); background: rgba(255,255,255,0.2); }
+
+  .cc-info { padding: 18px 20px 22px; }
+  .cc-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .cc-weight {
+    background: rgba(212,149,106,0.15); color: #d4956a;
+    font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 50px;
+  }
+  .cc-type {
+    background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.6);
+    font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 50px;
+  }
+  .cc-stars { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .cc-stars-val { color: #f5c842; font-size: 0.85rem; }
+  .cc-stars-count { font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+  .cc-name { font-family: 'Bodoni Moda', serif; font-size: 1.05rem; color: white; margin-bottom: 4px; font-weight: 700; }
+  .cc-desc { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-bottom: 16px; line-height: 1.5; }
+  .cc-footer { display: flex; align-items: center; justify-content: space-between; }
+  .cc-price { font-family: 'Bodoni Moda', serif; font-weight: 700; font-size: 1.15rem; color: #d4956a; }
+  .cc-cart {
+    background: linear-gradient(135deg, #d4956a, #8a4020);
+    color: white; border: none; padding: 9px 18px; border-radius: 50px;
+    font-family: 'Mulish', sans-serif; font-weight: 700; font-size: 0.8rem;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .cc-cart:hover { transform: scale(1.05); box-shadow: 0 4px 14px rgba(212,149,106,0.4); }
+
+  /* PAIRING SECTION */
+  .pairing-section {
+    background: linear-gradient(135deg, #0d0505, #2a1010);
+    border-radius: 24px; padding: 52px 48px; color: white; margin-top: 80px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+    border: 1px solid rgba(212,149,106,0.1);
+  }
+  @media(max-width:768px){ .pairing-section { grid-template-columns: 1fr; } }
+  .pairing-section h2 { font-family: 'Bodoni Moda', serif; font-size: 2rem; margin-bottom: 12px; color: white; }
+  .pairing-section p { color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 24px; font-size: 0.95rem; }
+  .pairing-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .pairing-list li { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.75); font-size: 0.9rem; }
+  .pairing-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pairing-item {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(212,149,106,0.1);
+    border-radius: 16px; padding: 20px;
+    text-align: center; font-size: 2.5rem; transition: background 0.2s;
+  }
+  .pairing-item:hover { background: rgba(212,149,106,0.08); }
+  .pairing-item p { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 6px; }
+
+  /* TOAST */
+  .g-toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, #1a0d0d, #d4956a);
+    color: white; padding: 14px 28px; border-radius: 50px;
+    font-family: 'Mulish', sans-serif; font-weight: 600; font-size: 0.9rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 9999;
+    animation: toastIn 0.3s ease;
+  }
+  @keyframes toastIn { from { opacity:0; transform: translateX(-50%) translateY(10px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+
+  @media(max-width:768px) {
+    .choc-hero, .choc-section { padding: 48px 20px; }
+    .pairing-section { padding: 36px 24px; }
   }
 `;
 
-export default function ShopPage() {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [sort, setSort] = useState("Featured");
-  const [search, setSearch] = useState("");
+export default function ChocolatesPage() {
+  const [activeType, setActiveType] = useState("All");
   const [wishlist, setWishlist] = useState<number[]>([]);
   const [toast, setToast] = useState("");
-
-  const showToast = (msg: string) => {
-    setToast(msg);
-    setTimeout(() => setToast(""), 2500);
-  };
-
-  let filtered = allProducts.filter(p => {
-    const matchCat = activeCategory === "All" || p.category === activeCategory;
-    const matchSearch = p.name.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
-  });
-
-  if (sort === "Price: Low to High") filtered = [...filtered].sort((a,b) => a.price - b.price);
-  else if (sort === "Price: High to Low") filtered = [...filtered].sort((a,b) => b.price - a.price);
-  else if (sort === "Best Rated") filtered = [...filtered].sort((a,b) => b.rating - a.rating);
-  else if (sort === "Most Reviews") filtered = [...filtered].sort((a,b) => b.reviews - a.reviews);
+  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(""), 2500); };
+  const filtered = activeType === "All" ? chocolates : chocolates.filter(c => c.type === activeType);
 
   return (
     <>
       <style>{styles}</style>
       <Nav cartCount={2} />
-      <div className="g-page">
+      <div className="choc-page">
         <Ribbon />
-        <div className="g-page-hero">
-          <div className="g-page-hero-content">
-            <div className="g-breadcrumb"><a href="/">Home</a> › Shop</div>
-            <h1>Our Gift Collection</h1>
-            <p>Discover beautifully curated gifts for every person and every occasion</p>
-          </div>
-        </div>
-        <div className="g-section">
-          <div className="shop-filters">
-            <div className="shop-cats">
-              {categories.map(c => (
-                <button key={c} className={`shop-cat-btn${activeCategory===c?" active":""}`} onClick={() => setActiveCategory(c)}>
-                  {c === "All" ? "All Products" : c.replace("-"," ")}
-                </button>
+        <div className="choc-hero">
+          <div className="choc-hero-inner">
+            <div className="g-breadcrumb"><a href="/">Home</a> › Chocolates</div>
+            <h1>Pure <em>Chocolate</em> Bliss 🍫</h1>
+            <p>Handcrafted by artisan chocolatiers — every piece is a moment of joy</p>
+            <div className="choc-badges">
+              {["🌿 Natural Ingredients","✋ Handcrafted","🏆 Award-Winning","❄️ Fresh Daily"].map(b => (
+                <span key={b} className="choc-badge">{b}</span>
               ))}
             </div>
-            <div className="shop-search">
-              <input placeholder="Search gifts..." value={search} onChange={e => setSearch(e.target.value)} />
-              <button>🔍</button>
-            </div>
-            <select className="shop-sort" value={sort} onChange={e => setSort(e.target.value)}>
-              {sortOptions.map(s => <option key={s}>{s}</option>)}
-            </select>
           </div>
-          <div className="results-bar">
-            <span>Showing <strong>{filtered.length}</strong> products</span>
-            <span className="shop-count">Free delivery on orders over Rs. 5,000 🎁</span>
+        </div>
+
+        <div className="choc-section">
+          <div className="choc-section-head">
+            <span className="g-label">Browse by Type</span>
+            <h2 className="choc-title">Our Chocolate Range</h2>
           </div>
-          {filtered.length === 0 ? (
-            <div className="g-empty">
-              <span className="g-empty-icon">🔍</span>
-              <h3>No gifts found</h3>
-              <p>Try a different search or category</p>
-              <button className="g-btn g-btn-rose" onClick={() => { setSearch(""); setActiveCategory("All"); }}>Clear filters</button>
-            </div>
-          ) : (
-            <div className="g-products-grid">
-              {filtered.map(p => (
-                <div key={p.id} className="g-product-card">
-                  <div className="g-product-img">
-                    {p.badge && <span className="g-product-badge">{p.badge}</span>}
-                    <button className="wishlist-btn" onClick={() => {
-                      setWishlist(w => w.includes(p.id) ? w.filter(x=>x!==p.id) : [...w,p.id]);
-                    }}>
-                      {wishlist.includes(p.id) ? "❤️" : "🤍"}
-                    </button>
-                    <span>{p.emoji}</span>
+
+          <div className="type-filters">
+            {types.map(t => (
+              <button key={t} className={`type-btn${activeType===t?" active":""}`} onClick={() => setActiveType(t)}>{t}</button>
+            ))}
+          </div>
+
+          <div className="choc-grid">
+            {filtered.map(c => (
+              <div key={c.id} className="cc-card">
+                <div className="cc-img-wrap">
+                  {c.badge && <span className="cc-badge">{c.badge}</span>}
+                  <button className="wishlist-btn" onClick={() => setWishlist(w => w.includes(c.id) ? w.filter(x=>x!==c.id) : [...w,c.id])}>
+                    {wishlist.includes(c.id) ? "❤️" : "🤍"}
+                  </button>
+                  <div className="cc-img-main">
+                    <Image src={c.img} alt={c.name} fill sizes="300px" style={{ objectFit:"cover" }} />
                   </div>
-                  <div className="g-product-info">
-                    <div className="product-stars">
-                      <span className="g-stars">{"★".repeat(p.rating)}{"☆".repeat(5-p.rating)}</span>
-                      <span>({p.reviews})</span>
-                    </div>
-                    <div className="g-product-name">{p.name}</div>
-                    <div className="g-product-desc">{p.desc}</div>
-                    <div className="g-product-footer">
-                      <div className="g-product-price">Rs. {p.price.toLocaleString()}</div>
-                      <button className="g-add-cart" onClick={() => showToast(`${p.emoji} Added to cart!`)}>Add to Cart</button>
+                  <div className="cc-img-alt">
+                    <div className="cc-img-alt-inner">
+                      <Image src={c.hoverImg} alt={c.name + " alt"} fill sizes="300px" style={{ objectFit:"cover" }} />
                     </div>
                   </div>
                 </div>
+                <div className="cc-info">
+                  <div className="cc-tags">
+                    <span className="cc-weight">⚖️ {c.weight}</span>
+                    <span className="cc-type">{c.type}</span>
+                  </div>
+                  <div className="cc-stars">
+                    <span className="cc-stars-val">{"★".repeat(c.rating)}{"☆".repeat(5-c.rating)}</span>
+                    <span className="cc-stars-count">({c.reviews})</span>
+                  </div>
+                  <div className="cc-name">{c.name}</div>
+                  <div className="cc-desc">{c.desc}</div>
+                  <div className="cc-footer">
+                    <div className="cc-price">Rs. {c.price.toLocaleString()}</div>
+                    <button className="cc-cart" onClick={() => showToast(`🍫 Added to cart!`)}>Add to Cart</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="pairing-section">
+            <div>
+              <h2>Perfect Pairings 🍷</h2>
+              <p>Our chocolatiers recommend pairing these fine chocolates with wine, tea, or coffee for the ultimate indulgence.</p>
+              <ul className="pairing-list">
+                <li>🍷 Dark Chocolate + Red Wine</li>
+                <li>🍵 Milk Chocolate + Chai Tea</li>
+                <li>☕ White Chocolate + Espresso</li>
+                <li>🫐 Truffles + Sparkling Wine</li>
+              </ul>
+            </div>
+            <div className="pairing-visual">
+              {[["🍫","Dark"],["🍬","Truffle"],["🥛","Milk"],["⬜","White"]].map(([icon,label]) => (
+                <div key={label} className="pairing-item">{icon}<p>{label}</p></div>
               ))}
             </div>
-          )}
+          </div>
         </div>
       </div>
       <Footer />
