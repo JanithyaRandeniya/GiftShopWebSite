@@ -627,7 +627,7 @@ export default function HomePage() {
         <div className="g-cta">
           <h2 className="g-cta-title">Ready to Make Someone <em>Smile?</em></h2>
           <p className="g-cta-sub">Browse our full collection and find the perfect gift today</p>
-          <Link href="/shop" className="g-btn-white">Explore All Gifts ✦</Link>
+          <Link href="/explore-gifts" className="g-btn-white">Explore All Gifts ✦</Link>
         </div>
       </main>
 

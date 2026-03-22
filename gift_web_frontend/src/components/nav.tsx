@@ -1,16 +1,20 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useCart } from "@/src/context/CartContext";
 
-export default function Nav({ cartCount = 0 }: { cartCount?: number }) {
+export default function Nav() {
   const path = usePathname();
+  const { cartCount } = useCart();
+
   const links = [
-    { href: "/shop", label: "Shop" },
-    { href: "/gift-boxes", label: "Gift Boxes" },
-    { href: "/chocolates", label: "Chocolates" },
-    { href: "/explore-gifts", label: "Explore" },
-    { href: "/about", label: "About" },
+    { href: "/shop",          label: "Shop"       },
+    { href: "/gift-boxes",    label: "Gift Boxes" },
+    { href: "/chocolates",    label: "Chocolates" },
+    { href: "/explore-gifts", label: "Explore"    },
+    { href: "/about",         label: "About"      },
   ];
+
   return (
     <nav className="g-nav">
       <Link href="/" className="g-nav-logo">Gift<span>ly</span> ✦</Link>
